@@ -1,0 +1,6 @@
+{
+	"plugins": [ "." ],
+	"themes": [
+		"https://downloads.wordpress.org/theme/twentytwentytwo.latest-stable.zip"
+	]
+}
