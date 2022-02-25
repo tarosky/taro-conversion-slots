@@ -32,6 +32,8 @@ class PostType extends SingletonPattern {
 		add_action( 'init', [ $this, 'register_post_type' ] );
 		add_action( 'add_meta_boxes', [ $this, 'register_meta_boxes' ] );
 		add_action( 'save_post_' . self::POST_TYPE, [ $this, 'save_post' ], 10, 2 );
+		add_filter( 'manage_' . self::POST_TYPE . '_posts_columns', [ $this, 'posts_column' ] );
+		add_action( 'manage_' . self::POST_TYPE . '_posts_custom_column', [ $this, 'posts_custom_column' ], 10, 2 );
 	}
 
 	/**
@@ -176,5 +178,46 @@ class PostType extends SingletonPattern {
 			</label>
 		</p>
 		<?php
+	}
+
+	/**
+	 * Column names.
+	 *
+	 * @param string[] $columns Column names.
+	 * @return string[]
+	 */
+	public function posts_column( $columns ) {
+		$new_columns = [];
+		foreach ( $columns as $key => $label ) {
+			$new_columns[ $key ] = $label;
+			if ( 'title' === $key ) {
+				$new_columns['position']  = __( 'Position', 'taro-cs' );
+				$new_columns['priority']  = __( 'Priority', 'taro-cs' );
+				$new_columns['condition'] = __( 'Condition', 'taro-cs' );
+			}
+		}
+		return $new_columns;
+	}
+
+	/**
+	 * Render column content.
+	 *
+	 * @param string $column  Column name.
+	 * @param int    $post_id Post ID.
+	 *
+	 * @return void
+	 */
+	public function posts_custom_column( $column, $post_id ) {
+		switch ( $column ) {
+			case 'position':
+				echo esc_html( Positions::get_position( $post_id ) );
+				break;
+			case 'priority':
+				echo number_format( get_post( $post_id )->menu_order );
+				break;
+			case 'condition':
+				echo esc_html( Conditions::get_condition_name( $post_id ) );
+				break;
+		}
 	}
 }
