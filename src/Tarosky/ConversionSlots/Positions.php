@@ -59,7 +59,7 @@ class Positions {
 	 * @return string
 	 */
 	public static function get_position( $post = null ) {
-		$post = get_post( $post );
+		$post      = get_post( $post );
 		$post_meta = get_post_meta( $post->ID, PostType::META_KEY_POSITION, true );
 		return self::label( $post_meta );
 	}

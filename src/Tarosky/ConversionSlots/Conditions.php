@@ -38,8 +38,8 @@ class Conditions {
 	 */
 	public static function get_condition_name( $post = null ) {
 		$conditions = self::get();
-		$post = get_post( $post );
-		$post_meta = get_post_meta( $post->ID, PostType::META_KEY_CONDITION, true );
-		return isset( $conditions[ $post_meta ] ) ? $conditions[ $post_meta ]->label(): '';
+		$post       = get_post( $post );
+		$post_meta  = get_post_meta( $post->ID, PostType::META_KEY_CONDITION, true );
+		return isset( $conditions[ $post_meta ] ) ? $conditions[ $post_meta ]->label() : '';
 	}
 }
